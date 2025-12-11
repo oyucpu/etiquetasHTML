@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="estilos.css">
+    <title>HTML 2025 - Referencia Completa (220 etiquetas)</title>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Referencia HTML 2025 – 220 etiquetas</h1>
+            <p>Con atributos, estado experimental y obsolescencia</p>
+        </header>
+
+        <div class="controls">
+            <div class="search-box">
+                <input type="text" id="searchInput" placeholder="Buscar etiqueta, atributo o descripción...">
+            </div>
+            <div class="filter-buttons">
+                <button class="filter-btn active" data-filter="all">Todas</button>
+                <button class="filter-btn" data-filter="current">Vigentes</button>
+                <button class="filter-btn experimental" data-filter="experimental">Experimentales</button>
+                <button class="filter-btn obsolete" data-filter="obsolete">Obsoletas</button>
+            </div>
+        </div>
+
+        <div class="content">
+            <div class="stats">
+                <div class="stat-card"><div class="stat-number" id="totalTags">220</div><div>Total Etiquetas</div></div>
+                <div class="stat-card"><div class="stat-number" id="currentTags">0</div><div>Vigentes</div></div>
+                <div class="stat-card"><div class="stat-number" id="experimentalTags">0</div><div>Experimentales</div></div>
+                <div class="stat-card"><div class="stat-number" id="obsoleteTags">0</div><div>Obsoletas</div></div>
+            </div>
+
+            <div class="tag-grid" id="tagGrid"></div>
+            <div class="no-results" id="noResults"><h3>No hay resultados</h3><p>Prueba otro término</p></div>
+        </div>
+    </div>
+
+    <script src="array.js"></script>
+
+    <script>
+    // --- helpers ---
+    const tagGrid = document.getElementById("tagGrid");
+    const searchInput = document.getElementById("searchInput");
+    const noResults = document.getElementById("noResults");
+
+    function createBadge(text, className) {
+        return `<span class="badge ${className}">${text}</span>`;
+    }
+
+    function renderTags(tags) {
+        tagGrid.innerHTML = "";
+        if (tags.length === 0) { 
+            noResults.style.display = "block"; 
+            return; 
+        }
+        noResults.style.display = "none";
+
+        tags.forEach(tag => {
+            const card = document.createElement("div");
+            let cardClass = "tag-card";
+            if (tag.obs) cardClass += " obsolete";
+            if (tag.exp) cardClass += " experimental";
+            card.className = cardClass;
+
+            // Badges
+            let badges = "";
+            if (tag.obs) badges += createBadge("Obsoleta", "obsolete");
+            if (tag.exp) badges += createBadge("Experimental", "experimental");
+            if (tag.global) badges += createBadge("Atributos globales", "global");
+
+            // Atributos: limpiar "(obs)" si existe (regex robusta, case-insensitive)
+            let attrsHTML = "";
+            if (tag.attrs && tag.attrs.length > 0) {
+                attrsHTML = `
+                    <div class="attributes-section">
+                        <div class="attributes-title">Atributos específicos</div>
+                        ${tag.attrs.map(a => {
+                            const isObs = /\s*\(obs\)$/i.test(a);
+                            const clean = a.replace(/\s*\(obs\)$/i, "");
+                            return `<span class="attribute ${isObs ? "obsolete" : ""}">${clean}</span>`;
+                        }).join("")}
+                    </div>`;
+            }
+
+            // Mostrar namespace si existe para distinguir entradas con mismo name
+            const nsLabel = tag.ns ? `<small class="ns">(${tag.ns.toUpperCase()})</small>` : "";
+
+            card.innerHTML = `
+                <div class="tag-header">
+                    <div class="tag-name">&lt;${tag.name}&gt; ${nsLabel}</div>
+                    <div class="badges">${badges}</div>
+                </div>
+                <div class="tag-description">${tag.desc}</div>
+                ${attrsHTML}
+            `;
+            tagGrid.appendChild(card);
+        });
+    }
+
+    function filterTags() {
+        const query = searchInput.value.toLowerCase().trim();
+        const active = document.querySelector(".filter-btn.active").dataset.filter;
+
+        let filtered = htmlTags.filter(tag => {
+            if (active === "current" && (tag.obs || tag.exp)) return false;
+            if (active === "obsolete" && !tag.obs) return false;
+            if (active === "experimental" && !tag.exp) return false;
+            if (!query) return true;
+
+            // incluir namespace (ns), nombre, descripción y atributos en la búsqueda
+            const text = `${tag.ns || ""} ${tag.name} ${tag.desc} ${tag.attrs ? tag.attrs.join(" ") : ""}`.toLowerCase();
+            return text.includes(query);
+        });
+
+        renderTags(filtered);
+
+        // Estadísticas: mostrar entradas totales y también nombres únicos (sin namespace)
+        const totalEntries = htmlTags.length;
+        const uniqueNames = new Set(htmlTags.map(t => (t.ns ? `${t.name}|${t.ns}` : t.name))).size;
+        document.getElementById("currentTags").textContent = htmlTags.filter(t => !t.obs && !t.exp).length;
+        document.getElementById("experimentalTags").textContent = htmlTags.filter(t => t.exp).length;
+        document.getElementById("obsoleteTags").textContent = htmlTags.filter(t => t.obs).length;
+        document.getElementById("totalTags").textContent = `${totalEntries} (${uniqueNames} entradas únicas con ns)`;
+    }
+
+    // listeners
+    searchInput.addEventListener("input", filterTags);
+    document.querySelectorAll(".filter-btn").forEach(btn => {
+        btn.addEventListener("click", () => {
+            document.querySelectorAll(".filter-btn").forEach(b => b.classList.remove("active"));
+            btn.classList.add("active");
+            filterTags();
+        });
+    });
+
+    // inicio: pintar todo
+    document.getElementById("currentTags").textContent = htmlTags.filter(t => !t.obs && !t.exp).length;
+    document.getElementById("experimentalTags").textContent = htmlTags.filter(t => t.exp).length;
+    document.getElementById("obsoleteTags").textContent = htmlTags.filter(t => t.obs).length;
+    document.getElementById("totalTags").textContent = htmlTags.length;
+    renderTags(htmlTags);
+
+    </script>
+</body>
+</html>

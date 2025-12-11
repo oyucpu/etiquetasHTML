@@ -1,0 +1,51 @@
+:root { --primary: #667eea; --danger: #e74c3c; --success: #27ae60; }
+        * { margin:0; padding:0; box-sizing:border-box; }
+        body { font-family:'Segoe UI',Arial,sans-serif; background:linear-gradient(135deg,#667eea,#764ba2); padding:20px; min-height:100vh; color:#2d3436; }
+        .container { max-width:1600px; margin:0 auto; background:#fff; border-radius:20px; box-shadow:0 25px 70px rgba(0,0,0,0.35); overflow:hidden; }
+        header { background:linear-gradient(135deg,var(--primary),#764ba2); color:#fff; padding:50px 30px; text-align:center; }
+        header h1 { font-size:2.8em; margin-bottom:12px; text-shadow:2px 2px 8px rgba(0,0,0,0.4); }
+        header p { font-size:1.3em; opacity:0.95; }
+        .controls { padding:35px 45px; background:#f8f9fa; border-bottom:2px solid #e9ecef; display:flex; gap:20px; flex-wrap:wrap; align-items:center; }
+        .search-box { flex:1; min-width:300px; }
+        .search-box input { width:100%; padding:15px 22px; border:2px solid #dee2e6; border-radius:30px; font-size:17px; transition:all .3s; }
+        .search-box input:focus { outline:none; border-color:var(--primary); box-shadow:0 0 0 5px rgba(102,126,234,0.2); }
+        .filter-buttons { display:flex; gap:12px; flex-wrap:wrap; }
+        .filter-btn { padding:12px 25px; border:2px solid #dee2e6; background:#fff; border-radius:30px; cursor:pointer; font-weight:600; transition:all .3s; }
+        .filter-btn:hover { transform:translateY(-3px); box-shadow:0 8px 16px rgba(0,0,0,0.12); }
+        .filter-btn.active { background:var(--primary); color:#fff; border-color:var(--primary); }
+        .filter-btn.obsolete.active { background:var(--danger); border-color:var(--danger); }
+        .content { padding:45px; }
+        .stats { display:grid; grid-template-columns:repeat(auto-fit,minmax(240px,1fr)); gap:25px; margin-bottom:45px; }
+        .stat-card { background:linear-gradient(135deg,var(--primary),#764ba2); color:#fff; padding:28px; border-radius:16px; text-align:center; }
+        .stat-number { font-size:3em; font-weight:bold; }
+        .tag-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(360px,1fr)); gap:28px; }
+        .tag-card { background:#fff; border:2px solid #e9ecef; border-radius:16px; padding:25px; transition:all .35s; }
+        .tag-card:hover { transform:translateY(-10px); box-shadow:0 20px 40px rgba(0,0,0,0.18); border-color:var(--primary); }
+        .tag-card.obsolete { background:#fff5f5; border-color:var(--danger); }
+        .tag-card.obsolete:hover { border-color:#c0392b; }
+        .tag-header { display:flex; justify-content:space-between; align-items:center; margin-bottom:15px; flex-wrap:wrap; gap:10px; }
+        .tag-name { font-family:'Courier New',monospace; font-size:24px; font-weight:bold; color:var(--primary); }
+        .obsolete .tag-name { color:var(--danger); }
+        .badges { display:flex; gap:8px; flex-wrap:wrap; }
+        .badge { padding:5px 12px; border-radius:12px; font-size:11px; font-weight:bold; text-transform:uppercase; }
+        .badge.obsolete { background:var(--danger); color:#fff; }
+        .badge.global { background:#9b59b6; color:#fff; }
+        .tag-description { font-size:15.5px; line-height:1.6; margin-bottom:18px; color:#2d3436; }
+        .attributes-section { margin-top:20px; padding-top:18px; border-top:1px dashed #ccc; }
+        .attributes-title { font-size:13.5px; font-weight:bold; color:#636e72; text-transform:uppercase; letter-spacing:1px; margin-bottom:12px; }
+        .attribute { display:inline-block; font-family:'Courier New',monospace; font-size:13.5px; padding:6px 11px; margin:4px; border-radius:7px; background:#e8f9f5; border:1px solid var(--success); color:var(--success); }
+        .attribute.obsolete { background:#fde8e8; border-color:var(--danger); color:var(--danger); }
+        .no-results { text-align:center; padding:100px 20px; color:#636e72; display:none; font-size:1.4em; }
+        @media (max-width:768px) {
+            .tag-grid { grid-template-columns:1fr; }
+            .controls { flex-direction:column; align-items:stretch; }
+        }
+
+        .badge.experimental {
+            background: #7c3aed;     /* morado/violeta */
+            color: white;
+}
+
+        .badge.experimental {
+            content: "Experimental";
+}
