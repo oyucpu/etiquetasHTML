@@ -1678,6 +1678,9 @@ const htmlTags = [
     "global": true,
     "attrs": []
   },
+  
+{ name: "rect", ns: "svg", desc: "Rectángulo (SVG)", obs: false, exp: false, global: true, attrs: ["x","y","width","height","fill"] },  
+  
   {
     "name": "rp",
     "ns": "html",
