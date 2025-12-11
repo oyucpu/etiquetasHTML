@@ -351,6 +351,9 @@ const htmlTags = [
     "global": true,
     "attrs": []
   },
+  
+{ name: "circle", "ns":"avg", desc: "Círculo (SVG)", obs: false, exp: false, global: true, attrs: ["cx","cy","r","fill","stroke"] },  
+  
   {
     "name": "cite",
     "ns": "html",
